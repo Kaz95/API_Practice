@@ -5,8 +5,8 @@ from config import config
 
 
 def create_tables():
-    """ create tables in the PostgreSQL database"""
-    commands = (
+    # create tables in the PostgreSQL database
+    commands = (    # Commands are being passed as multi-line strings.
         """
         CREATE TABLE vendors (
             vendor_id SERIAL PRIMARY KEY,
@@ -41,13 +41,13 @@ def create_tables():
                     ON UPDATE CASCADE ON DELETE CASCADE
         )
         """)
-    conn = None
+    conn = None  # Sets a connection var which is currently None(Disconnected)
     try:
         # read the connection parameters
         params = config()
         # connect to the PostgreSQL server
-        conn = psycopg2.connect(**params)
-        cur = conn.cursor()
+        conn = psycopg2.connect(**params)  # Variable holding connection parameters. Pulled from database.ini via config
+        cur = conn.cursor()  # Creates a cursor object. Used to execute commands. This is the actual connection.
         # create table one by one
         for command in commands:
             cur.execute(command)
@@ -58,7 +58,7 @@ def create_tables():
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
-        if conn is not None:
+        if conn is not None:    # Note the 'not'. So if connection was open; close connection.
             conn.close()
 
 

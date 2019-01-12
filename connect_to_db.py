@@ -2,8 +2,8 @@
 import psycopg2
 from config import config
 
-
-conn = psycopg2.connect("dbname=suppliers user=postgres password=bob")
+# The point of the config and .ini setup is to avoid repeating this every time I want to connect to DB
+# conn = psycopg2.connect("dbname=suppliers user=postgres password=bob")
 
 
 def connect():

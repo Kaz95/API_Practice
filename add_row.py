@@ -7,7 +7,7 @@ from config import config
 def insert_vendor(vendor_name):
     """ insert a new vendor into the vendors table """
     sql = """INSERT INTO vendors(vendor_name)
-             VALUES(%s) RETURNING vendor_id;"""
+             VALUES(%s) RETURNING vendor_id;"""  # TODO WTF is this even.
     conn = None
     vendor_id = None
     try:
@@ -20,7 +20,7 @@ def insert_vendor(vendor_name):
         # execute the INSERT statement
         cur.execute(sql, (vendor_name,))
         # get the generated id back
-        vendor_id = cur.fetchone()[0]
+        vendor_id = cur.fetchone()[0]   # TODO WTF is this even.
         # commit the changes to the database
         conn.commit()
         # close communication with the database
