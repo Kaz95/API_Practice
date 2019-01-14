@@ -1,15 +1,12 @@
-#!/usr/bin/python
 from psycopg2 import sql
 import psycopg2
 from config import config
 
 
-# Working model for inserting rows
-def pleb_adds_rows(table_name, some, shits):
-    """ insert a new vendor into the vendors table """
-    k = sql.SQL("""INSERT INTO {}(name, api, quantity)
-             VALUES
-             (%s, %s, 1);""").format(sql.Identifier(table_name))
+def add_one(some_table, some_name):
+    k = sql.SQL("""UPDATE {}
+            SET quantity = quantity + 1
+            WHERE name = %s;""").format(sql.Identifier(some_table))
     conn = None
 
     try:
@@ -20,7 +17,7 @@ def pleb_adds_rows(table_name, some, shits):
         # create a new cursor
         cur = conn.cursor()
         # execute the INSERT statement
-        cur.execute(k, (some, shits,))  # The second set of () and , are completely necessary.
+        cur.execute(k, (some_name,))    # The second set of () and , are completely necessary.
         # commit the changes to the database
         conn.commit()
         # close communication with the database
@@ -30,5 +27,3 @@ def pleb_adds_rows(table_name, some, shits):
     finally:
         if conn is not None:
             conn.close()
-
-

@@ -4,11 +4,12 @@ from psycopg2 import sql    # Normal import psycopg2 didn't import sql for some 
 from config import config
 
 
-def create_tables(some_shit):
+def create_tables(table_name):
     # create tables in the PostgreSQL database with pass value as name.
     k = sql.SQL("""CREATE TABLE {} (
           name VARCHAR,
-          api VARCHAR);""").format(sql.Identifier(some_shit))
+          api VARCHAR,
+          quantity INTEGER);""").format(sql.Identifier(table_name))
 
     conn = None  # Sets a connection var which is currently None(Disconnected)
     try:
