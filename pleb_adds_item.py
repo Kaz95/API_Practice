@@ -5,4 +5,8 @@ search_results = pleb_search()   # Holds API info for slicing into pleb_adds_row
 
 
 def pleb_adds_item():
-    pleb_adds_rows(search_results[0], search_results[1])
+    pleb_adds_rows('store', search_results[0], search_results[1])
+
+
+if __name__ == '__main__':
+    pleb_adds_item()
