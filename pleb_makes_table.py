@@ -7,8 +7,8 @@ from config import config
 def create_tables(some_shit):
     # create tables in the PostgreSQL database with pass value as name.
     k = sql.SQL("""CREATE TABLE {} (
-          id serial NOT NULL PRIMARY KEY,
-          name VARCHAR);""").format(sql.Identifier(some_shit))
+          name VARCHAR,
+          api VARCHAR);""").format(sql.Identifier(some_shit))
 
     conn = None  # Sets a connection var which is currently None(Disconnected)
     try:
