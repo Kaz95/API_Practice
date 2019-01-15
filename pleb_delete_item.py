@@ -1,3 +1,4 @@
+# !/usr/bin/python
 from psycopg2 import sql
 import psycopg2
 from config import config

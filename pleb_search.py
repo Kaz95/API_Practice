@@ -1,3 +1,4 @@
+# !/usr/bin/python
 import json  # JSON module handles API language translation
 import requests  # requests module handles fetching urls
 
@@ -28,3 +29,6 @@ def pleb_search():
             print(api_info)
             return api_info
 
+
+if __name__ == '__main__':
+    pleb_search()
