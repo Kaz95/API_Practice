@@ -4,7 +4,7 @@ import psycopg2
 from config import config
 import json  # JSON module handles API language translation
 import requests  # requests module handles fetching urls
-from pleb_delete_item import delete
+from pleb_delete import delete
 
 
 class Item:
@@ -15,7 +15,7 @@ class Item:
 
     # Working model for inserting rows
     def add_item(self, table_name):
-        """ insert a new vendor into the vendors table """
+        # Add a new item
         k = sql.SQL("""INSERT INTO {}(name, api, quantity)
                  VALUES
                  (%s, %s, 1);""").format(sql.Identifier(table_name))

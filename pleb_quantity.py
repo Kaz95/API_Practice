@@ -2,7 +2,7 @@
 from psycopg2 import sql
 import psycopg2
 from config import config
-from pleb_delete_item import delete
+from pleb_delete import delete
 
 
 class Item:
@@ -11,7 +11,7 @@ class Item:
         self.api = api
         self.quantity = 1
 
-    def add_one(self, some_table):
+    def add(self, some_table):
         k = sql.SQL("""UPDATE {}
                 SET quantity = quantity + 1
                 WHERE name = %s;""").format(sql.Identifier(some_table))
@@ -36,7 +36,7 @@ class Item:
             if conn is not None:
                 conn.close()
 
-    def minus_one(self, some_table):
+    def minus(self, some_table):
         k = sql.SQL("""UPDATE {}
                 SET quantity = quantity - 1
                 WHERE name = %s;""").format(sql.Identifier(some_table))
