@@ -86,5 +86,4 @@ def create_account_archive():
             conn.close()
 
 
-if __name__ == '__main__':
-    create_inventory('bob')
+

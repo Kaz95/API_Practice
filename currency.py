@@ -11,7 +11,7 @@ class Currency:
 
 
 # Subclasses for specific units of currency
-# TODO Unit field currently unused. Hoping to use to cut back on redundant code.
+# TODO Unit field currently unused. Hoping to use to cut back on redundant code. Consider removing until then.
 class GP(Currency):
     def __init__(self, quantity, unit):
         Currency.__init__(self, quantity)
@@ -106,7 +106,3 @@ class CP(Currency):
 
 
 
-if __name__ == '__main__':
-    GP(5, None).add('bob')
-    SP(99, None).add('bob')
-    CP(99, None).add('bob')

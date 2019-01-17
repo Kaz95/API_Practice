@@ -89,5 +89,3 @@ def account_row(name, password, role):
 
 
 
-if __name__ == '__main__':
-    bank_row('bob')

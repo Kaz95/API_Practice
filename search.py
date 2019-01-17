@@ -15,7 +15,7 @@ import requests  # requests module handles fetching urls
 #         if i['name'] == item:   # If dic[name] == item searched for
 
 
-def pleb_search():
+def search():
     url = "http://www.dnd5eapi.co/api/equipment/"  # Storing API url as var
     response = requests.get(url)    # stores response from .get ping as response
     response.raise_for_status()     # Checks response for errors
@@ -30,5 +30,3 @@ def pleb_search():
             return api_info
 
 
-if __name__ == '__main__':
-    pleb_search()

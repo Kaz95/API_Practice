@@ -117,5 +117,3 @@ def delete_zero(name, some_table):
 
 
 
-if __name__ == '__main__':
-    plus('')
