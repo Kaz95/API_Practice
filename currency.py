@@ -4,18 +4,18 @@ import psycopg2
 from config import config
 
 
+# Superclass
 class Currency:
     def __init__(self, quantity):
         self.quantity = quantity
 
-# Unit field currently unused. Hoping to use to cut back on redundant code.
 
-
+# Subclasses for specific units of currency
+# TODO Unit field currently unused. Hoping to use to cut back on redundant code.
 class GP(Currency):
     def __init__(self, quantity, unit):
         Currency.__init__(self, quantity)
         self.unit = unit
-    # Work in progress
 
     def add(self, name):
         k = sql.SQL("""UPDATE currency
@@ -105,5 +105,4 @@ class CP(Currency):
                 conn.close()
 
 
-if __name__ == '__main__':
-    GP(5, 'yolo').add('bob')
+

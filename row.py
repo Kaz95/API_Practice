@@ -4,9 +4,9 @@ import psycopg2
 from config import config
 
 
-# Working model for inserting rows
-def inventory_row(table_name, some_name, some_api):
-
+# Working model for item rows
+def item_row(table_name, some_name, some_api):
+    # Defaults quantity value to 1
     k = sql.SQL("""INSERT INTO {}(name, api, quantity)
              VALUES
              (%s, %s, 1);""").format(sql.Identifier(table_name))
@@ -32,6 +32,7 @@ def inventory_row(table_name, some_name, some_api):
             conn.close()
 
 
+# Working model for bank rows
 def bank_row(name):
     # sets all units of currency to 0 value.
     k = sql.SQL("""INSERT INTO currency(name, gp, sp, cp) 
@@ -59,6 +60,7 @@ def bank_row(name):
             conn.close()
 
 
+# Working model for account rows
 def account_row(name, password, role):
 
     k = sql.SQL("""INSERT INTO account(name, password, role) 
@@ -86,5 +88,4 @@ def account_row(name, password, role):
             conn.close()
 
 
-if __name__ == '__main__':
-    account_row('bob', 'tree53', 'DM')
+

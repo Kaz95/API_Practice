@@ -7,13 +7,15 @@ import requests  # requests module handles fetching urls
 from pleb_delete import delete
 
 
+# Creates item object. Requires data from api call.
 class Item:
     def __init__(self, name, api):
         self.name = name
         self.api = api
         self.quantity = 1
 
-    # Working model for inserting rows
+    # TODO Replace with row mododule
+    # Working model for item rows
     def add_item(self, table_name):
         # Add a new item
         k = sql.SQL("""INSERT INTO {}(name, api, quantity)
@@ -40,6 +42,7 @@ class Item:
             if conn is not None:
                 conn.close()
 
+    # TODO Add to row module and replace
     def delete(self, some_table):
         k = sql.SQL("""DELETE FROM {}
                        WHERE name = %s;""").format(sql.Identifier(some_table))
@@ -66,7 +69,6 @@ class Item:
 
     def get_info(self):
         # Search for equipment and return item info.
-
         url = "http://www.dnd5eapi.co/api/equipment/"  # Storing API url as var
         response = requests.get(url)  # stores response from .get ping as response
         response.raise_for_status()  # Checks response for errors
@@ -81,6 +83,8 @@ class Item:
         item_info = json.loads(response.text)  # Assigns detailed item info to a var in form of nested dictionary.
         return item_info
 
+    # TODO Rework all quantity methods into separate module
+    # the following methods handle quantity. Including the deletion of 0 quantity items. Will be reworked to its own mod
     def add_one(self, some_table):
         k = sql.SQL("""UPDATE {}
                 SET quantity = quantity + 1
@@ -163,16 +167,3 @@ class Item:
                 conn.close()
         self.delete_zero(some_table)
 
-
-
-
-class Person:
-    def __init__(self, name):
-        self.name = name
-
-    def say_hi(self, other):
-        print('Hello ' + other + ', my name is', self.name)
-
-
-p = Person('Swaroop')
-p.say_hi('Bob')

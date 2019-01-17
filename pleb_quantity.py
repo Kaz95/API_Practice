@@ -4,6 +4,8 @@ import psycopg2
 from config import config
 from pleb_delete import delete
 
+# TODO Rework into all purpose quantity module
+
 
 class Item:
     def __init__(self, name, api):
