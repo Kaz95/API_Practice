@@ -49,7 +49,7 @@ class SP(Currency):
         self.unit = unit
 
     def add(self, name):
-        k = sql.SQL("""UPDATE {}
+        k = sql.SQL("""UPDATE currency
                 SET sp = sp + %s
                 WHERE name = %s;""")
         conn = None
@@ -80,7 +80,7 @@ class CP(Currency):
         self.unit = unit
 
     def add(self, name):
-        k = sql.SQL("""UPDATE {}
+        k = sql.SQL("""UPDATE currency
                 SET cp = cp + %s
                 WHERE name = %s;""")
         conn = None
@@ -106,3 +106,7 @@ class CP(Currency):
 
 
 
+if __name__ == '__main__':
+    GP(5, None).add('bob')
+    SP(99, None).add('bob')
+    CP(99, None).add('bob')

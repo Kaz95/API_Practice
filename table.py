@@ -87,4 +87,4 @@ def create_account_archive():
 
 
 if __name__ == '__main__':
-    create_account_archive()
+    create_inventory('bob')
