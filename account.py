@@ -72,10 +72,10 @@ def get_password(name):
 
 # Authenticates given password based on DB info tied to given name.
 def authenticate(name, password):
-    if get_password(name) != password:
-        return 'Invalid password'
+    if get_password(name) == password:
+        return True
     else:
-        return 'Welcome ' + name + ' !'
+        return False
 
 
 # Creates user account object

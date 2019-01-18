@@ -1,3 +1,14 @@
+import psycopg2
+from psycopg2 import sql
+from config import config
+from table import create_account_archive
+from table import create_bank
+from table import create_inventory
+from row import account_row
+from row import bank_row
+from account import get_password
+
+
 def get_dic():
     info = {
                 "count": 256,
@@ -30,5 +41,116 @@ def get_item_api_info():
                     [i['name']] + [i['url']])  # Double bracket to make sure string isn't slice by character.
                 print(api_info)
                 return api_info
+
+
+# Working model for checking if table exists. Should return True if exists.
+def check_table_exists(name):
+    conn = None
+    k = ("""SELECT EXISTS (
+         SELECT 1
+         FROM   information_schema.tables
+         WHERE  table_schema = 'public'
+         AND    table_name = %s );""")
+    try:
+        params = config()
+        conn = psycopg2.connect(**params)
+        cur = conn.cursor()
+        cur.execute(k, (name,))
+        row = cur.fetchone()
+        row = row[0]
+        cur.close()
+        return row
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+
+
+def query_row(name):
+    conn = None
+    k = sql.SQL("""SELECT * FROM {};""").format(sql.Identifier(name))
+    try:
+        params = config()
+        conn = psycopg2.connect(**params)
+        cur = conn.cursor()
+        cur.execute(k, (name,))
+        row = cur.fetchone()
+        cur.close()
+        info = []
+        for i in row:
+            info.append(i)
+        return info
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+
+
+# Returns pass word of given name from DB
+def test_get_password():
+    conn = None
+    k = """SELECT password
+               FROM account
+               WHERE name = 'bob';"""
+    try:
+        params = config()
+        conn = psycopg2.connect(**params)
+        cur = conn.cursor()
+        cur.execute(k)
+        role_tup = cur.fetchone()
+        password = role_tup[0]
+        cur.close()
+        return password
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+
+
+# Authenticates given password based on DB info tied to given name.
+def test_authenticate():
+    if get_password('bob') == 'tree53':
+        return True
+    else:
+        return False
+
+
+def test_bank_row():  # TODO Refactor to currency
+    # sets all units of currency to 0 value.
+    k = sql.SQL("""INSERT INTO currency(name, gp, sp, cp) 
+             VALUES
+             ('bob', 0, 0, 0);""")
+    conn = None
+
+    try:
+        # read database configuration
+        params = config()
+        # connect to the PostgreSQL database
+        conn = psycopg2.connect(**params)
+        # create a new cursor
+        cur = conn.cursor()
+        # execute the INSERT statement
+        cur.execute(k)  # The second set of () and , are completely necessary.
+        # commit the changes to the database
+        conn.commit()
+        # close communication with the database
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+
+
+
+if __name__ == '__main__':
+    create_bank()
+    create_inventory('bob')
+    create_account_archive()
+    account_row('bob', 'tree53', 'DM')
+    test_bank_row()
 
 

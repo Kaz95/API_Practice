@@ -33,7 +33,7 @@ from config import config
 
 
 # Working model for bank rows
-def bank_row(name):
+def bank_row(name):  # TODO Refactor to currency
     # sets all units of currency to 0 value.
     k = sql.SQL("""INSERT INTO currency(name, gp, sp, cp) 
              VALUES
@@ -61,6 +61,7 @@ def bank_row(name):
 
 
 # Working model for account rows
+
 def account_row(name, password, role):
 
     k = sql.SQL("""INSERT INTO account(name, password, role) 
@@ -86,6 +87,5 @@ def account_row(name, password, role):
     finally:
         if conn is not None:
             conn.close()
-
 
 
