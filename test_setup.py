@@ -7,6 +7,9 @@ from table import create_inventory
 from row import account_row
 from row import bank_row
 from account import get_password
+from currency import GP
+from currency import SP
+from currency import CP
 
 
 def get_dic():
@@ -30,13 +33,12 @@ def get_dic():
     return info
 
 
-def get_item_api_info():
+def test_get_item_api_info():
         api = get_dic()['results']
         list_of_dic = api  # Dictionary containing Name/url: Values
-        print('What are you looking for?')
-        item = 'Club'  # Asks for item to search for
+        test_item = 'Club'  # Asks for item to search for
         for i in list_of_dic:  # For dic in list of dics
-            if i['name'] == item:  # If dic[name] == item searched for
+            if i['name'] == test_item:  # If dic[name] == item searched for
                 api_info = list(
                     [i['name']] + [i['url']])  # Double bracket to make sure string isn't slice by character.
                 print(api_info)
@@ -67,9 +69,9 @@ def check_table_exists(name):
             conn.close()
 
 
-def query_row(name):
+def query_row(table, name):
     conn = None
-    k = sql.SQL("""SELECT * FROM {};""").format(sql.Identifier(name))
+    k = sql.SQL("""SELECT * FROM {} WHERE name = %s;""").format(sql.Identifier(table))
     try:
         params = config()
         conn = psycopg2.connect(**params)
@@ -118,11 +120,12 @@ def test_authenticate():
         return False
 
 
-def test_bank_row():  # TODO Refactor to currency
+def sample_bank_rows():
     # sets all units of currency to 0 value.
     k = sql.SQL("""INSERT INTO currency(name, gp, sp, cp) 
              VALUES
-             ('bob', 0, 0, 0);""")
+             ('bob', 0, 0, 0),
+             ('currency test', 0, 0, 0);""")
     conn = None
 
     try:
@@ -145,12 +148,68 @@ def test_bank_row():  # TODO Refactor to currency
             conn.close()
 
 
+def drop_tables(table_name):
+    k = sql.SQL("""DROP TABLE {}""").format(sql.Identifier(table_name))
+
+    conn = None
+
+    try:
+        params = config()
+        conn = psycopg2.connect(**params)
+        cur = conn.cursor()
+        cur.execute(k)
+        conn.commit()
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+
+
+def test_currency():
+    GP(5, None).add('currency test')
+    SP(99, None).add('currency test')
+    CP(99, None).add('currency test')
+
+
+def add_test_item(table_name):
+    sample_item = test_get_item_api_info()
+    # Add a new item
+    k = sql.SQL("""INSERT INTO {}(name, api, quantity)
+             VALUES
+             (%s, %s, 1);""").format(sql.Identifier(table_name))
+    conn = None
+
+    try:
+        # read database configuration
+        params = config()
+        # connect to the PostgreSQL database
+        conn = psycopg2.connect(**params)
+        # create a new cursor
+        cur = conn.cursor()
+        # execute the INSERT statement
+        cur.execute(k, (sample_item[0], sample_item[1],))  # The second set of () and , are completely necessary.
+        # commit the changes to the database
+        conn.commit()
+        # close communication with the database
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+
 
 if __name__ == '__main__':
-    create_bank()
-    create_inventory('bob')
-    create_account_archive()
-    account_row('bob', 'tree53', 'DM')
-    test_bank_row()
-
-
+    # drop_tables('account')
+    # drop_tables('currency')
+    # drop_tables('bob')
+    # create_bank()
+    # create_inventory('bob')
+    # create_account_archive()
+    # account_row('bob', 'tree53', 'DM')
+    # sample_bank_rows()
+    # test_currency()
+    # add_test_item('bob')
+    print(query_row('bob', 'Club'))
